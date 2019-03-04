@@ -9,3 +9,6 @@
 /config
 .DS_Store
 .project
+fabcarns/node_modules
+.vscode/settings.json
+.gitignore
