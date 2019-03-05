@@ -6,6 +6,8 @@
 
 const { Contract } = require('fabric-contract-api');
 
+// A chaincode contains multiple contracts with different namespaces.
+
 class FabCarNS extends Contract {
 
     constructor() {

@@ -22,8 +22,13 @@ const {Gateway, FileSystemWallet, X509WalletMixin, DefaultEventHandlerStrategies
 var logger = new (winston.Logger)({transports: [new (winston.transports.Console)()]});
 
 // Call the only test function.
-testQuery();
-//testInvoke();
+
+let arg = process.argv[2];
+switch (arg) {
+    case 'query' : testQuery();; break;
+    case 'invoke' : testInvoke(); break;
+    default: logger.error(`Please run command likes: 'node fabcarnstest.js query' or 'node fabcarnstest.js invoke'`);
+}
 
 async function testQuery() {
     const identityLabel = 'Admin@org1.example.com';
@@ -46,8 +51,7 @@ async function testQuery() {
     const result = await contract.evaluateTransaction('queryAllCars');
 
     gateway.disconnect();
-    
-    logger.info('Result', Buffer.from(result).toString());
+    logger.info('Result', JSON.parse(Buffer.from(result).toString()));
 }
 
 async function testInvoke() {
@@ -78,17 +82,15 @@ async function testInvoke() {
         const network = await gateway.getNetwork('mychannel');
         const contract = await network.getContract('fabcarns', 'org.example.fabrcarvipns');
 
-        //const transaction = contract.createTransaction('initLedger');
-        //const transactionId = transaction.getTransactionID().getTransactionID();    
-        //logger.info('Create a transaction ID: ', transactionId);        
-        //const response = await transaction.submit();
+        //const result = await contract.submitTransaction('initLedger');
 
-        const result = await contract.submitTransaction('initLedger');
-        //const result = await contract.evaluateTransaction('queryAllCars');
+        const transaction = contract.createTransaction('initLedger');
+        const transactionId = transaction.getTransactionID().getTransactionID();    
+        logger.info('Create a transaction ID: ', transactionId);        
+        const result = await transaction.submit();
 
         gateway.disconnect();
         logger.info('Result', Buffer.from(result).toString());
-            
     } 
     catch (err) {
 		logger.error('Failed to invoke transaction chaincode on channel. ' + err.stack ? err.stack : err);
