@@ -44,7 +44,7 @@ peer chaincode query -C $CHANNEL_NAME -n $CC_NAME -c '{"function":"queryCar","Ar
 
 ################################# Install fabcarns chaincode
 export CC_SRC_PATH="/opt/gopath/src/github.com/chaincode/fabcarns/javascript"
-export VERSION="1.2"
+export VERSION="1.3"
 export CC_NAME="fabcarns" 
 export LANGUAGE="node"
 
@@ -85,3 +85,8 @@ peer channel fetch newest -c $CHANNEL_NAME -o $ORDERER_ADDRESS --tls --cafile $O
 configtxgen --inspectBlock channel-artifacts/mychannel_newest.block
 
 # The transaction id from application is identical with what from block.
+
+# create car
+source ./scripts/setparas.sh peerconn 0 1 0 2
+peer chaincode invoke -o $ORDERER_ADDRESS --tls --cafile $ORDERER_CA -C $CHANNEL_NAME -n $CC_NAME \
+$PEER_CONN_PARMS -c '{"function":"createCar","Args":["CAR001", "FORD", "MUSTANG", "RED", "TOM"]}'

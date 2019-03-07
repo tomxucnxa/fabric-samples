@@ -84,10 +84,12 @@ async function testInvoke() {
 
         //const result = await contract.submitTransaction('initLedger');
 
-        const transaction = contract.createTransaction('initLedger');
-        const transactionId = transaction.getTransactionID().getTransactionID();    
-        logger.info('Create a transaction ID: ', transactionId);        
-        const result = await transaction.submit();
+        // const transaction = contract.createTransaction('initLedger');
+        // const transactionId = transaction.getTransactionID().getTransactionID();    
+        // logger.info('Create a transaction ID: ', transactionId);        
+        // const result = await transaction.submit();
+
+        const result = await contract.submitTransaction('createCar', "CAR002", "FORD", "MUSTANG", "RED", "TOM");
 
         gateway.disconnect();
         logger.info('Result', Buffer.from(result).toString());

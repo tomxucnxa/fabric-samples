@@ -59,19 +59,30 @@ class FabCarNS extends Contract {
         return carAsBytes.toString();
     }
 
+    // Simulate exception.
     async createCar(ctx, carNumber, make, model, color, owner) {
         console.info('============= START : Create NS Car ===========');
 
-        const car = {
+        const r = Math.random();
+
+        const car = r > 0.5 ? {
             color,
             docType: 'car',
             make,
             model,
             owner,
+        } : {
+            color,
+            model,
+            owner,
+            docType: 'car',
+            make,
         };
 
-        await ctx.stub.putState(carNumber, Buffer.from(JSON.stringify(car)));
-        console.info('============= END : Create NS Car ===========');
+        const jsonStr = JSON.stringify(car);        
+        await ctx.stub.putState(carNumber, Buffer.from(jsonStr));
+        console.info('============= END : Create NS Car with different json ele order ===========');
+        console.info(jsonStr);
     }
 
     async queryAllCars(ctx) {
